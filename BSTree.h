@@ -17,14 +17,14 @@ private:
     CBSTree* right;
     CBSTree* root;
 
-    void AddLeafPrivate(const T& value, CBSTree* Ptr) {
+    void AddLeafRecursive(const T& value, CBSTree* Ptr) {
         if (root == nullptr) {
             root = CreateLeaf(value);
         }
         else if (value < Ptr->value) {
             if (Ptr->left != nullptr)
             {
-                AddLeafPrivate(value, Ptr->left);
+                AddLeafRecursive(value, Ptr->left);
             }
             else {
                 Ptr->left = CreateLeaf(value);
@@ -33,7 +33,7 @@ private:
         else if (value > Ptr->value) {
             if (Ptr->right != nullptr)
             {
-                AddLeafPrivate(value, Ptr->right);
+                AddLeafRecursive(value, Ptr->right);
             }
             else {
                 Ptr->right = CreateLeaf(value);
@@ -44,17 +44,17 @@ private:
         cout << "The value " << value << " has already been added to the tree\n";
         }
     }
-    void PrintInOrderPrivate(CBSTree* Ptr)
+    void PrintInOrderRecursive(CBSTree* Ptr)
     {
         if (root != nullptr && Ptr != nullptr) {
             if (Ptr->left != nullptr)
             {
-                PrintInOrderPrivate(Ptr->left);
+                PrintInOrderRecursive(Ptr->left);
             }
             cout << Ptr->value << " ";
             if (Ptr->right != nullptr)
             {
-                PrintInOrderPrivate(Ptr->right);
+                PrintInOrderRecursive(Ptr->right);
             }
         }
         else {
@@ -63,9 +63,9 @@ private:
     }
     CBSTree* ReturnNode(const T& value)
     {
-        return ReturnNodePrivate(value, root);
+        return ReturnNodeRecursive(value, root);
     }
-    CBSTree* ReturnNodePrivate(const T& value, CBSTree* Ptr)
+    CBSTree* ReturnNodeRecursive(const T& value, CBSTree* Ptr)
     {
         if (Ptr != NULL)
         {
@@ -77,11 +77,11 @@ private:
             {
                 if (value < Ptr->value)
                 {
-                    return ReturnNodePrivate(value, Ptr->left);
+                    return ReturnNodeRecursive(value, Ptr->left);
                 }
                 else
                 {
-                    return ReturnNodePrivate(value, Ptr->right);
+                    return ReturnNodeRecursive(value, Ptr->right);
                 }
             }
         }
@@ -90,7 +90,7 @@ private:
             return NULL;
         }
     }
-    T FindSmallestPrivate(CBSTree* Ptr)
+    T FindSmallestRecursive(CBSTree* Ptr)
     {
         if (root == NULL || Ptr == NULL)
         {
@@ -101,7 +101,7 @@ private:
         {
             if (Ptr->left != NULL)
             {
-                return FindSmallestPrivate(Ptr->left);
+                return FindSmallestRecursive(Ptr->left);
             }
             else
             {
@@ -109,7 +109,7 @@ private:
             }
         }
     }
-    void RemoveNodePrivate(const T& value, CBSTree* parent)
+    void RemoveNodeRecursive(const T& value, CBSTree* parent)
     {
         if (root->value == value)
         {
@@ -126,7 +126,7 @@ private:
                     }
                 else
                 {
-                    RemoveNodePrivate(value, parent->left);
+                    RemoveNodeRecursive(value, parent->left);
                 }
             }
             else if (value > parent->value && parent->right != NULL)
@@ -137,7 +137,7 @@ private:
                 }
                 else
                 {
-                    RemoveNodePrivate(value, parent->right);
+                    RemoveNodeRecursive(value, parent->right);
                 }
             }
             else
@@ -180,8 +180,8 @@ private:
         //root node has two children
         else
         {
-            smallestInRightSubtree = FindSmallestPrivate(root->right);
-            RemoveNodePrivate(smallestInRightSubtree, root);
+            smallestInRightSubtree = FindSmallestRecursive(root->right);
+            RemoveNodeRecursive(smallestInRightSubtree, root);
             root->value = smallestInRightSubtree;
             cout << "The root value containing value " << rootValue <<" was overwritten with value " << root->value << endl;
         }
@@ -243,8 +243,8 @@ private:
             //Two Children
             else
             {
-                smallestInRightSubtree = FindSmallestPrivate(match->right);
-                RemoveNodePrivate(smallestInRightSubtree, match);
+                smallestInRightSubtree = FindSmallestRecursive(match->right);
+                RemoveNodeRecursive(smallestInRightSubtree, match);
                 match->value = smallestInRightSubtree;
 
                 cout << "Two Children:The node containing value " << matchValue << " was removed\n";
@@ -271,12 +271,12 @@ public:
     
     void AddLeaf(const T& value)
     {
-        AddLeafPrivate(value, root);
+        AddLeafRecursive(value, root);
     }    
     
     void PrintInOrder() 
     {
-        PrintInOrderPrivate(root);
+        PrintInOrderRecursive(root);
     }
 
     T ReturnRootValue()
@@ -322,11 +322,11 @@ void PrintChildren(const T& value)
     }
     T FindSmallest()
     {
-        return FindSmallestPrivate(root);
+        return FindSmallestRecursive(root);
     }
     void RemoveNode(const T& value) {
         if (root != NULL) {
-            RemoveNodePrivate(value, root);
+            RemoveNodeRecursive(value, root);
         }
         else
         {
