@@ -1,11 +1,14 @@
 // This is a type agnostic binary search tree class
 // Author: Eric Wistrand
 // Date  : 10/23/2018
+// 11/05/2018 - added _RECURSIVE_ define, and some non-recursive versions of things - ejw
 
 #pragma once
 #include <iostream>
 #include <cstdlib>
+#include <stack>
 #include "type_name.h"
+//#define _RECURSIVE_
 using namespace std;
 
 template<typename T> class CBSTree
@@ -276,7 +279,35 @@ public:
     
     void PrintInOrder() 
     {
+#ifdef _RECURSIVE_
         PrintInOrderRecursive(root);
+#else // NON-RECURSIVE
+        // check if root is null
+        if (root == NULL){return;}
+        // move to the bottom of the list
+        std::stack<CBSTree*> st;
+        CBSTree* pTree = root;
+        // load stack while traversing left
+        while (pTree) {
+            st.push(pTree);
+            pTree = pTree->left;
+        }
+
+        // move up the tree and print as we go...
+        while (!st.empty() && NULL != (pTree = st.top())) {
+            st.pop();
+            cout << pTree->value << " ";
+            //right side of tree 
+            if (pTree->right) {
+                pTree = pTree->right;
+                while (pTree) {
+                    st.push(pTree);
+                    pTree = pTree->left;
+                }
+            }
+        }
+        cout << endl;
+#endif
     }
 
     T ReturnRootValue()
@@ -322,7 +353,16 @@ void PrintChildren(const T& value)
     }
     T FindSmallest()
     {
+#ifdef _RECURSIVE_
         return FindSmallestRecursive(root);
+#else  //NON-RECURSIVE
+        CBSTree* pTree = root;
+        while (pTree->left) {
+            pTree = pTree->left;
+        }
+        return pTree->value;
+#endif
+
     }
     void RemoveNode(const T& value) {
         if (root != NULL) {
@@ -333,5 +373,35 @@ void PrintChildren(const T& value)
             cout << "The tree is empty\n";
         }
     }
+    T kthSmallestInBST(int k) {
+        std::stack<CBSTree*> st;
+        CBSTree* pTree = root;
 
+        //load stack while traversing left
+        while (pTree) {
+            st.push(pTree);
+            pTree = pTree->left;
+        }
+
+        // get items out in reverse order
+        // decrement k to zero if we reach zero it means we found it.
+        // if not it mean we have to move the right side of the tree
+        while (NULL != (pTree = st.top())) {
+            st.pop();
+            if (--k == 0) {
+                //st.stackIndex = 0;
+                break;
+            }
+
+            //right side of tree 
+            if (pTree->right) {
+                pTree = pTree->right;
+                while (pTree) {
+                    st.push(pTree);
+                    pTree = pTree->left;
+                }
+            }
+        }
+        return pTree->value;
+    }
 };

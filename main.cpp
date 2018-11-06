@@ -28,6 +28,9 @@ int main()
     
     int ismall = myTree.FindSmallest();
     cout << "Smallest value is " << ismall << endl;
+    int k = 4;
+    int isKthsmallest = myTree.kthSmallestInBST(k);
+    cout << k << "th smallest value is " << isKthsmallest << endl;
 
     cout << "Enter a value to delete. Enter -1 to stop the process\n";
     while (input != -1)
@@ -72,6 +75,10 @@ int main()
     string small = myTreeStr.FindSmallest();
     cout << "Smallest value is " << small << endl;
 
+    k = 4;
+    string isKthsmallestStr = myTreeStr.kthSmallestInBST(k);
+    cout << k << "th smallest value is " << isKthsmallestStr << endl;
+
     cout << "Enter a value to delete. Enter 'stop' to stop the process\n";
     while (sinput != "stop")
     {
@@ -96,4 +103,3 @@ int main()
 
     return 0; 
 }
-
