@@ -12,11 +12,12 @@ int main()
 {
     clock_t start, finish;
     double duration;
+
     //Test loading and printing integers
     int TreeKeys[16] = {50,76,21,4,32,64,15,52,14,100,83,2,3,70,87,80 };
     CBSTree<int> myTree;
     int input=0;
-    string sinput = "";;
+    string sinput = "";
     cout << "Printing the tree in order\nBefore adding numbers\n";
     myTree.PrintInOrder();
     for (int i = 0; i < 16; ++i) {
@@ -26,15 +27,13 @@ int main()
     myTree.PrintInOrder();
     cout << endl;
     
-    int ismall = myTree.FindSmallest();
-    cout << "Smallest value is " << ismall << endl;
-    int k = 4;
-    int isKthsmallest = myTree.kthSmallestInBST(k);
-    cout << k << "th smallest value is " << isKthsmallest << endl;
-
-    cout << "Enter a value to delete. Enter -1 to stop the process\n";
     while (input != -1)
     {
+        int ismall = myTree.FindSmallest();
+        cout << "Smallest value is " << ismall << endl;
+        int isKthsmallest = myTree.kthSmallestInBST(4);
+        cout << "4th smallest value is " << isKthsmallest << endl;
+        cout << "Enter a value to delete. Enter -1 to stop the process\n";
         cout << "Delete Node: ";
         cin >> input;
         {
@@ -72,16 +71,14 @@ int main()
     string s = "one";
     myTreeStr.PrintChildren(s);
 
-    string small = myTreeStr.FindSmallest();
-    cout << "Smallest value is " << small << endl;
-
-    k = 4;
-    string isKthsmallestStr = myTreeStr.kthSmallestInBST(k);
-    cout << k << "th smallest value is " << isKthsmallestStr << endl;
 
     cout << "Enter a value to delete. Enter 'stop' to stop the process\n";
     while (sinput != "stop")
     {
+        string small = myTreeStr.FindSmallest();
+        cout << "Smallest value is " << small << endl;
+        string isKthsmallestStr = myTreeStr.kthSmallestInBST(4);
+        cout << "4th smallest value is " << isKthsmallestStr << endl;
         cout << "Delete Node: ";
         cin >> sinput;
         {

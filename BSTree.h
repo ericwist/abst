@@ -20,26 +20,26 @@ private:
     CBSTree* right;
     CBSTree* root;
 
-    void AddLeafRecursive(const T& value, CBSTree* Ptr) {
+    void AddLeafRecursive(const T& value, CBSTree* pTree) {
         if (root == nullptr) {
             root = CreateLeaf(value);
         }
-        else if (value < Ptr->value) {
-            if (Ptr->left != nullptr)
+        else if (value < pTree->value) {
+            if (pTree->left != nullptr)
             {
-                AddLeafRecursive(value, Ptr->left);
+                AddLeafRecursive(value, pTree->left);
             }
             else {
-                Ptr->left = CreateLeaf(value);
+                pTree->left = CreateLeaf(value);
             }
         }
-        else if (value > Ptr->value) {
-            if (Ptr->right != nullptr)
+        else if (value > pTree->value) {
+            if (pTree->right != nullptr)
             {
-                AddLeafRecursive(value, Ptr->right);
+                AddLeafRecursive(value, pTree->right);
             }
             else {
-                Ptr->right = CreateLeaf(value);
+                pTree->right = CreateLeaf(value);
             }
         }
         else
@@ -47,17 +47,17 @@ private:
         cout << "The value " << value << " has already been added to the tree\n";
         }
     }
-    void PrintInOrderRecursive(CBSTree* Ptr)
+    void PrintInOrderRecursive(CBSTree* pTree)
     {
-        if (root != nullptr && Ptr != nullptr) {
-            if (Ptr->left != nullptr)
+        if (root != nullptr && pTree != nullptr) {
+            if (pTree->left != nullptr)
             {
-                PrintInOrderRecursive(Ptr->left);
+                PrintInOrderRecursive(pTree->left);
             }
-            cout << Ptr->value << " ";
-            if (Ptr->right != nullptr)
+            cout << pTree->value << " ";
+            if (pTree->right != nullptr)
             {
-                PrintInOrderRecursive(Ptr->right);
+                PrintInOrderRecursive(pTree->right);
             }
         }
         else {
@@ -68,47 +68,47 @@ private:
     {
         return ReturnNodeRecursive(value, root);
     }
-    CBSTree* ReturnNodeRecursive(const T& value, CBSTree* Ptr)
+    CBSTree* ReturnNodeRecursive(const T& value, CBSTree* pTree)
     {
-        if (Ptr != NULL)
+        if (pTree != nullptr)
         {
-            if (Ptr->value == value)
+            if (pTree->value == value)
             {
-                return Ptr;
+                return pTree;
             }
             else
             {
-                if (value < Ptr->value)
+                if (value < pTree->value)
                 {
-                    return ReturnNodeRecursive(value, Ptr->left);
+                    return ReturnNodeRecursive(value, pTree->left);
                 }
                 else
                 {
-                    return ReturnNodeRecursive(value, Ptr->right);
+                    return ReturnNodeRecursive(value, pTree->right);
                 }
             }
         }
         else
         {
-            return NULL;
+            return nullptr;
         }
     }
-    T FindSmallestRecursive(CBSTree* Ptr)
+    T FindSmallestRecursive(CBSTree* pTree)
     {
-        if (root == NULL || Ptr == NULL)
+        if (root == nullptr || pTree == nullptr)
         {
             cout << "The tree is empty or the leaf is empty\n";
             return NULL;
         }
         else
         {
-            if (Ptr->left != NULL)
+            if (pTree->left != nullptr)
             {
-                return FindSmallestRecursive(Ptr->left);
+                return FindSmallestRecursive(pTree->left);
             }
             else
             {
-                return Ptr->value;
+                return pTree->value;
             }
         }
     }
@@ -121,7 +121,7 @@ private:
         }
         else
         {
-            if (value < parent->value && parent->left != NULL)
+            if (value < parent->value && parent->left != nullptr)
             {
                 if (parent->left->value == value)
                 {
@@ -132,7 +132,7 @@ private:
                     RemoveNodeRecursive(value, parent->left);
                 }
             }
-            else if (value > parent->value && parent->right != NULL)
+            else if (value > parent->value && parent->right != nullptr)
             {
                 if (parent->right->value == value)
                 {
@@ -155,26 +155,26 @@ private:
         T smallestInRightSubtree;
 
         //root as zero children
-        if (root->left == NULL && root->right == NULL)
+        if (root->left == nullptr && root->right == nullptr)
         {
-            root = NULL;
+            root = nullptr;
             delete delPtr;
         }
 
         //root node has one child
-        else if (root->left == NULL && root->right != NULL)
+        else if (root->left == nullptr && root->right != nullptr)
         {
             root = root->right;
-            delPtr->right = NULL;
+            delPtr->right = nullptr;
             delete delPtr;
             cout << "The root node with value" << rootValue << " was deleted. "
                     << "The new root contains value " << root->value << endl;
                     
         }
-        else if (root->left != NULL && root->right == NULL)
+        else if (root->left != nullptr && root->right == nullptr)
         {
             root = root->left;
-            delPtr->left = NULL;
+            delPtr->left = nullptr;
             delete delPtr;
             cout << "The root node with value" << rootValue << " was deleted. "
                     << "The new root contains value " << root->value << endl;
@@ -191,28 +191,29 @@ private:
     }
     void RemoveMatch(CBSTree* parent, CBSTree* match, bool left)
     {
-        if (root != NULL)
+        if (root != nullptr)
         {
             CBSTree* delPtr;
             T matchValue = match->value;
             T smallestInRightSubtree;
 
-            //matching node has zero children
-            if (match->left == NULL && match->right == NULL)
+            // matching node has zero children
+            if (match->left == nullptr && match->right == nullptr)
             {
                 delPtr = match;
                 if (left == true)
                 {
-                    parent->left = NULL;
+                    parent->left = nullptr;
                 }
                 else
                 {
-                    parent->right = NULL;
+                    parent->right = nullptr;
                 }
                 delete delPtr;
                 cout << "Root Node: The node containing value " << matchValue << " was removed\n";
             }
-            else if (match->left == NULL && match->right != NULL)
+            // only right child exists
+            else if (match->left == nullptr && match->right != nullptr)
             {
                 if (left == true)
                 {
@@ -222,12 +223,13 @@ private:
                 {
                     parent->right = match->right;
                 }
-                match->right = NULL;
+                match->right = nullptr;
                 delPtr = match;
                 delete delPtr;
                 cout << "Only right child existed: The node containing value " << matchValue << " was removed\n";
             }
-            else if (match->left != NULL && match->right == NULL)
+            //only left child exists
+            else if (match->left != nullptr && match->right == nullptr)
             {
                 if (left == true)
                 {
@@ -237,13 +239,12 @@ private:
                 {
                     parent->right = match->left;
                 }
-                match->left = NULL;
+                match->left = nullptr;
                 delPtr = match;
                 delete delPtr;
                 cout << "Only left child existed: The node containing value " << matchValue << " was removed\n";
             }
-
-            //Two Children
+            //two Children
             else
             {
                 smallestInRightSubtree = FindSmallestRecursive(match->right);
@@ -261,7 +262,7 @@ private:
 
 public:
     CBSTree() { };
-    CBSTree(const T &v) : value(v), left(nullptr), right(nullptr) { if (root == NULL) { root = this; } }
+    CBSTree(const T &v) : value(v), left(nullptr), right(nullptr) { if (root == nullptr) { root = this; } }
    
     CBSTree* CreateLeaf(const T& value)
     {
@@ -283,7 +284,7 @@ public:
         PrintInOrderRecursive(root);
 #else // NON-RECURSIVE
         // check if root is null
-        if (root == NULL){return;}
+        if (root == nullptr) { cout << "Tree is empty." << endl; return; }
         // move to the bottom of the list
         std::stack<CBSTree*> st;
         CBSTree* pTree = root;
@@ -294,7 +295,7 @@ public:
         }
 
         // move up the tree and print as we go...
-        while (!st.empty() && NULL != (pTree = st.top())) {
+        while (!st.empty() && nullptr != (pTree = st.top())) {
             st.pop();
             cout << pTree->value << " ";
             //right side of tree 
@@ -312,7 +313,7 @@ public:
 
     T ReturnRootValue()
     {
-        if (root != NULL)
+        if (root != nullptr)
         {
             return root->value;
         }
@@ -324,26 +325,26 @@ public:
 
 void PrintChildren(const T& value)
     {
-        CBSTree* Ptr = ReturnNode(value);
+        CBSTree* pTree = ReturnNode(value);
 
-        if (Ptr != NULL)
+        if (pTree != nullptr)
         {
-            cout << "Parent Node = " << Ptr->value << endl;
-            if (Ptr->left == NULL)
+            cout << "Parent Node = " << pTree->value << endl;
+            if (pTree->left == nullptr)
             {
                 cout << "Left Child = NULL" << endl;
             }
             else
             {
-                cout << "Left Child = " << Ptr->left->value << endl;
+                cout << "Left Child = " << pTree->left->value << endl;
             }
-            if (Ptr->right == NULL)
+            if (pTree->right == nullptr)
             {
                 cout << "Right Child = NULL" << endl;
             }
             else
             {
-                cout << "Right Child = " << Ptr->right->value << endl;
+                cout << "Right Child = " << pTree->right->value << endl;
             }
         }
         else
@@ -365,7 +366,7 @@ void PrintChildren(const T& value)
 
     }
     void RemoveNode(const T& value) {
-        if (root != NULL) {
+        if (root != nullptr) {
             RemoveNodeRecursive(value, root);
         }
         else
@@ -386,7 +387,7 @@ void PrintChildren(const T& value)
         // get items out in reverse order
         // decrement k to zero if we reach zero it means we found it.
         // if not it mean we have to move the right side of the tree
-        while (NULL != (pTree = st.top())) {
+        while (nullptr != (pTree = st.top())) {
             st.pop();
             if (--k == 0) {
                 //st.stackIndex = 0;
