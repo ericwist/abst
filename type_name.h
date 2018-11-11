@@ -21,7 +21,7 @@ type_name()
         NULL,
 #endif
         std::free);
-    std::string r = own != NULL ? own.get() : typeid(TR).name();
+    std::string r = own != nullptr ? own.get() : typeid(TR).name();
     if (std::is_const<TR>::value)
         r += " const";
     if (std::is_volatile<TR>::value)

@@ -113,7 +113,7 @@ private:
         if (root == nullptr || pTree == nullptr)
         {
             cout << "The tree is empty or the leaf is empty\n";
-            return NULL;
+            return (T)NULL;
         }
         else
         {
