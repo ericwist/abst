@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <stack>
 #include "type_name.h"
-//#define _RECURSIVE_
+#define _RECURSIVE_
 using namespace std;
 
 template<typename T> class CBSTree
@@ -49,6 +49,7 @@ private:
     }
     void PrintInOrderRecursive(CBSTree* pTree)
     {
+#if 0
         if (root != nullptr && pTree != nullptr) {
             if (pTree->left != nullptr)
             {
@@ -62,7 +63,21 @@ private:
         }
         else {
             cout << "The tree is empty\n";
+    }
+#else
+        if (root == nullptr) {
+            cout << "The tree is empty\n";
         }
+        if (pTree != nullptr) {
+            if (pTree->left) {
+                PrintInOrderRecursive(pTree->left);
+            }
+            cout << pTree->value << " ";
+            if (pTree->right) {
+                PrintInOrderRecursive(pTree->right);
+            }
+        }
+#endif
     }
     CBSTree* ReturnNode(const T& value)
     {
@@ -261,7 +276,7 @@ private:
     }
 
 public:
-    CBSTree() { };
+    CBSTree() { }
     CBSTree(const T &v) : value(v), left(nullptr), right(nullptr) { if (root == nullptr) { root = this; } }
    
     CBSTree* CreateLeaf(const T& value)
