@@ -25,6 +25,14 @@ int main()
     }
     cout << "Printing the tree in order\nAfter adding numbers\n";
     myTree.PrintInOrder();
+    bool bret_symmetric = myTree.isTreeSymmetric();
+    if (bret_symmetric) {
+        cout << "The tree is symmetric\n";
+    }
+    else {
+        cout << "The tree is NOT symmetric\n";
+    }
+    myTree.PrintByLevel();
     cout << endl;
     
     while (input != -1)
@@ -79,6 +87,7 @@ int main()
         cout << "Smallest value is " << small << endl;
         string isKthsmallestStr = myTreeStr.kthSmallestInBST(4);
         cout << "4th smallest value is " << isKthsmallestStr << endl;
+        myTreeStr.findSubstrings("an");
         cout << "Delete Node: ";
         cin >> sinput;
         {
@@ -97,6 +106,7 @@ int main()
             }
         }
     }
-
     return 0; 
 }
+
+

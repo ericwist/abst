@@ -7,8 +7,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <stack>
+#include <queue>
 #include "type_name.h"
-#define _RECURSIVE_
+//#define _RECURSIVE_
 using namespace std;
 
 template<typename T> class CBSTree
@@ -19,7 +20,6 @@ private:
     CBSTree* left;
     CBSTree* right;
     CBSTree* root;
-
     void AddLeafRecursive(const T& value, CBSTree* pTree) {
         if (root == nullptr) {
             root = CreateLeaf(value);
@@ -274,7 +274,39 @@ private:
             cout << "Cannot remove match. The tree is empty\n";
         }
     }
+    bool areTreesMirrorImages(CBSTree *pTree1, CBSTree *pTree2) {
+        // base cases
+        if (pTree1 == nullptr && pTree2 == nullptr)
+            return true;
 
+        if (pTree1 == nullptr || pTree2 == nullptr)
+            return false;
+
+        if (pTree1->value != pTree2->value)
+            return false;
+
+        // compare the left side of pTree1 to the right side of pTree2
+        if (areTreesMirrorImages(pTree1->left, pTree2->right) == false)
+            return false;
+
+        // ... and compare the right side of pTree1 to the left side of pTree2
+        return areTreesMirrorImages(pTree1->right, pTree2->left);
+    }
+    bool areTreesIdentical(CBSTree *pTree1, CBSTree *pTree2) {
+
+        if (pTree1 == nullptr && pTree2 == nullptr)
+            return true;
+
+        if (pTree1 == nullptr || pTree2 == nullptr)
+            return false;
+
+        if (pTree1->value != pTree2->value)
+            return false;
+
+        return (pTree1->value == pTree2->value &&
+            areTreesIdentical(pTree1->left, pTree2->left) &&
+            areTreesIdentical(pTree1->right, pTree2->right));
+    }
 public:
     CBSTree() { }
     CBSTree(const T &v) : value(v), left(nullptr), right(nullptr) { if (root == nullptr) { root = this; } }
@@ -338,7 +370,7 @@ public:
         }
     }
 
-void PrintChildren(const T& value)
+    void PrintChildren(const T& value)
     {
         CBSTree* pTree = ReturnNode(value);
 
@@ -419,5 +451,65 @@ void PrintChildren(const T& value)
             }
         }
         return pTree->value;
+    }
+    
+    bool isTreeSymmetric() {
+        if (root == nullptr)
+            return true;
+        return areTreesMirrorImages(root->left, root->right);
+    }
+
+    void findSubstrings(const T& val)
+    {
+        if (root == nullptr) { cout << "Tree is empty." << endl; return; }
+        std::queue<CBSTree*> queue;
+        queue.push(root);
+        while (queue.size()) {
+            CBSTree * pTree = queue.front();
+            queue.pop();
+            if (pTree->left) {
+                queue.push(pTree->left);
+            }
+
+            std::size_t found = pTree->value.find(val);
+            if (found != std::string::npos)
+                std::cout << "*Substring* '" << val << "' found in: " << pTree->value << '\n';
+
+            if (pTree->right) {
+                queue.push(pTree->right);
+            }
+        }
+    }
+
+    void PrintByLevel() {
+        if (root == nullptr) { cout << "Tree is empty." << endl; return; }
+
+        std::queue<CBSTree*> queue;
+
+        int lvl = 0;
+        queue.push(root);
+        while (queue.size()) {
+            CBSTree * pTree = queue.front();
+            queue.pop();
+
+            if (pTree->left) {
+                queue.push(pTree->left);
+            }
+            cout << pTree->value << " ";
+
+            if (pTree->right) {
+                queue.push(pTree->right);
+            }
+            
+            ++lvl;
+            switch (lvl) {
+            case 1: cout << "\n"; break;
+            case 3: cout << "\n"; break;
+            case 7: cout << "\n"; break;
+            case 16: cout << "\n"; break;
+            }
+            
+        }
+
     }
 };
