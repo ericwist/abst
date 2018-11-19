@@ -433,7 +433,7 @@ public:
 
         // get items out in reverse order
         // decrement k to zero if we reach zero it means we found it.
-        // if not it mean we have to move the right side of the tree
+        // if not it means we have to move the right side of the tree
         while (nullptr != (pTree = st.top())) {
             st.pop();
             if (--k == 0) {
@@ -483,32 +483,18 @@ public:
 
     void PrintByLevel() {
         if (root == nullptr) { cout << "Tree is empty." << endl; return; }
-
         std::queue<CBSTree*> queue;
-
-        int lvl = 0;
         queue.push(root);
         while (queue.size()) {
             CBSTree * pTree = queue.front();
             queue.pop();
-
             if (pTree->left) {
                 queue.push(pTree->left);
             }
             cout << pTree->value << " ";
-
             if (pTree->right) {
                 queue.push(pTree->right);
             }
-            
-            ++lvl;
-            switch (lvl) {
-            case 1: cout << "\n"; break;
-            case 3: cout << "\n"; break;
-            case 7: cout << "\n"; break;
-            case 16: cout << "\n"; break;
-            }
-            
         }
 
     }
