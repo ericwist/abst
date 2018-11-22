@@ -32,8 +32,8 @@ int main()
     else {
         cout << "The tree is NOT symmetric\n";
     }
-    myTree.PrintByLevel();
-    cout << endl;
+    
+
     
     while (input != -1)
     {
@@ -41,6 +41,17 @@ int main()
         cout << "Smallest value is " << ismall << endl;
         int isKthsmallest = myTree.kthSmallestInBST(4);
         cout << "4th smallest value is " << isKthsmallest << endl;
+        int tvalint = 64;
+        CBSTree<int>* successor = myTree.inOrderSuccessor(tvalint);
+        if (successor != nullptr) {
+            cout << "The successor of " << tvalint << " is " << successor->getValue() << endl;
+        }
+        else {
+            cout << tvalint << " has no successor." << endl;
+        }
+        cout << "Print by tree level." << endl;
+        myTree.printLevelOrder();
+        cout << endl;        
         cout << "Enter a value to delete. Enter -1 to stop the process\n";
         cout << "Delete Node: ";
         cin >> input;
@@ -78,16 +89,27 @@ int main()
     cout << "Print one and children\n";
     string s = "one";
     myTreeStr.PrintChildren(s);
-
-
-    cout << "Enter a value to delete. Enter 'stop' to stop the process\n";
+    cout << "Print by tree level." << endl;
+    myTreeStr.printLevelOrder();
     while (sinput != "stop")
     {
         string small = myTreeStr.FindSmallest();
         cout << "Smallest value is " << small << endl;
         string isKthsmallestStr = myTreeStr.kthSmallestInBST(4);
         cout << "4th smallest value is " << isKthsmallestStr << endl;
+        string sval = "beavis";
+        CBSTree<string>* successor = myTreeStr.inOrderSuccessor(sval);
+        cout << "The successor of " << sval << " is " << successor->getValue() << endl;
         myTreeStr.findSubstrings("an");
+        cout << "Printing the tree in order\nAfter adding strings\n";
+        myTreeStr.PrintInOrder();
+        cout << endl;
+        cout << "Print one and children\n";
+        string s = "one";
+        myTreeStr.PrintChildren(s);
+        cout << "Print by tree level." << endl;
+        myTreeStr.printLevelOrder();
+        cout << "Enter a value to delete. Enter 'stop' to stop the process\n";
         cout << "Delete Node: ";
         cin >> sinput;
         {

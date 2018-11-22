@@ -14,15 +14,17 @@ using namespace std;
 
 template<typename T> class CBSTree
 {
-
 private:
     T value;
     CBSTree* left;
     CBSTree* right;
+    CBSTree* parent;
     CBSTree* root;
+
     void AddLeafRecursive(const T& value, CBSTree* pTree) {
         if (root == nullptr) {
             root = CreateLeaf(value);
+            parent = nullptr;
         }
         else if (value < pTree->value) {
             if (pTree->left != nullptr)
@@ -31,6 +33,9 @@ private:
             }
             else {
                 pTree->left = CreateLeaf(value);
+                pTree->left->parent = pTree;
+                cout << "Adding left value: " << value << "\n";
+                cout << "Parent: " << pTree->value << "\n";
             }
         }
         else if (value > pTree->value) {
@@ -40,6 +45,9 @@ private:
             }
             else {
                 pTree->right = CreateLeaf(value);
+                pTree->right->parent = pTree;
+                cout << "Adding right value: " << value << "\n";
+                cout << "Parent: " << pTree->value << "\n";
             }
         }
         else
@@ -47,6 +55,32 @@ private:
         cout << "The value " << value << " has already been added to the tree\n";
         }
     }
+
+    CBSTree* minValue(CBSTree* node) {
+        CBSTree* current = node;
+
+        // Loop down to find the leftmost leaf
+        while (current->left != nullptr) {
+            current = current->left;
+        }
+        return current;
+    }
+
+    int maxDepth(CBSTree* p)
+    {
+        if (p == nullptr)
+            return 0;
+        else
+        {
+            int lDepth = maxDepth(p->left);
+            int rDepth = maxDepth(p->right);
+
+            if (lDepth > rDepth)
+                return(lDepth + 1);
+            else return(rDepth + 1);
+        }
+    }
+
     void PrintInOrderRecursive(CBSTree* pTree)
     {
 #if 0
@@ -79,10 +113,12 @@ private:
         }
 #endif
     }
+
     CBSTree* ReturnNode(const T& value)
     {
         return ReturnNodeRecursive(value, root);
     }
+
     CBSTree* ReturnNodeRecursive(const T& value, CBSTree* pTree)
     {
         if (pTree != nullptr)
@@ -108,6 +144,7 @@ private:
             return nullptr;
         }
     }
+
     T FindSmallestRecursive(CBSTree* pTree)
     {
         if (root == nullptr || pTree == nullptr)
@@ -127,6 +164,7 @@ private:
             }
         }
     }
+
     void RemoveNodeRecursive(const T& value, CBSTree* parent)
     {
         if (root->value == value)
@@ -164,7 +202,9 @@ private:
             }
         }
     }
-    void RemoveRootMatch() {
+
+    void RemoveRootMatch()
+    {
         CBSTree* delPtr = root;
         T rootValue = root->value;
         T smallestInRightSubtree;
@@ -204,6 +244,7 @@ private:
             cout << "The root value containing value " << rootValue <<" was overwritten with value " << root->value << endl;
         }
     }
+
     void RemoveMatch(CBSTree* parent, CBSTree* match, bool left)
     {
         if (root != nullptr)
@@ -274,7 +315,9 @@ private:
             cout << "Cannot remove match. The tree is empty\n";
         }
     }
-    bool areTreesMirrorImages(CBSTree *pTree1, CBSTree *pTree2) {
+
+    bool areTreesMirrorImages(CBSTree *pTree1, CBSTree *pTree2)
+    {
         // base cases
         if (pTree1 == nullptr && pTree2 == nullptr)
             return true;
@@ -292,7 +335,9 @@ private:
         // ... and compare the right side of pTree1 to the left side of pTree2
         return areTreesMirrorImages(pTree1->right, pTree2->left);
     }
-    bool areTreesIdentical(CBSTree *pTree1, CBSTree *pTree2) {
+
+    bool areTreesIdentical(CBSTree *pTree1, CBSTree *pTree2)
+    {
 
         if (pTree1 == nullptr && pTree2 == nullptr)
             return true;
@@ -307,15 +352,31 @@ private:
             areTreesIdentical(pTree1->left, pTree2->left) &&
             areTreesIdentical(pTree1->right, pTree2->right));
     }
+
+    void printGivenLevel(CBSTree* p, int level)
+    {
+        if (p == nullptr)
+            return;
+        if (level == 1)
+            cout << p->value << " ";
+        else if (level > 1)
+        {
+            printGivenLevel(p->left, level - 1);
+            printGivenLevel(p->right, level - 1);
+        }
+    }
+
 public:
-    CBSTree() { }
-    CBSTree(const T &v) : value(v), left(nullptr), right(nullptr) { if (root == nullptr) { root = this; } }
-   
+    CBSTree() {}
+    CBSTree(const T &v) : value(v), left(nullptr), right(nullptr), parent(nullptr) { if (root == nullptr) { root = this; } }
+    T getValue() { return value; }
+
     CBSTree* CreateLeaf(const T& value)
     {
         CBSTree* node = new CBSTree(value);
         node->left = nullptr;
         node->right = nullptr;
+        node->parent = nullptr;
 
         return node;
     }  
@@ -399,6 +460,7 @@ public:
             cout << "Value " << value << " is not in the tree\n";
         }
     }
+
     T FindSmallest()
     {
 #ifdef _RECURSIVE_
@@ -412,6 +474,7 @@ public:
 #endif
 
     }
+
     void RemoveNode(const T& value) {
         if (root != nullptr) {
             RemoveNodeRecursive(value, root);
@@ -480,7 +543,7 @@ public:
             }
         }
     }
-
+#if 0
     void PrintByLevel() {
         if (root == nullptr) { cout << "Tree is empty." << endl; return; }
         std::queue<CBSTree*> queue;
@@ -496,6 +559,36 @@ public:
                 queue.push(pTree->right);
             }
         }
+        cout << endl;
+    }
+#endif
+    void printLevelOrder()
+    {
+        int h = maxDepth(root);
+        for (int i = 1; i <= h; i++)
+        {
+            printGivenLevel(root, i);
+            cout << endl;
+        }
+    }
+    
+    CBSTree * inOrderSuccessor(const T& value)
+    {
+        CBSTree* pTree = nullptr;
+        if (nullptr == (pTree = ReturnNode(value))){
+            return nullptr;
+        }
 
+        if (pTree->right != nullptr) {
+            return minValue(pTree->right);
+        }
+
+        CBSTree *p = pTree->parent;
+        while (p != nullptr && pTree == p->right)
+        {
+            pTree = p;
+            p = p->parent;
+        }
+        return p;
     }
 };
