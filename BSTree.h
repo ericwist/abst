@@ -56,16 +56,6 @@ private:
         }
     }
 
-    CBSTree* minValue(CBSTree* node) {
-        CBSTree* current = node;
-
-        // Loop down to find the leftmost leaf
-        while (current->left != nullptr) {
-            current = current->left;
-        }
-        return current;
-    }
-
     int maxDepth(CBSTree* p)
     {
         if (p == nullptr)
@@ -527,7 +517,8 @@ public:
         if (root == nullptr) { cout << "Tree is empty." << endl; return; }
         std::queue<CBSTree*> queue;
         queue.push(root);
-        while (queue.size()) {
+        while (queue.size())
+        {
             CBSTree * pTree = queue.front();
             queue.pop();
             if (pTree->left) {
@@ -576,14 +567,21 @@ public:
     {
         CBSTree* pTree = nullptr;
         if (nullptr == (pTree = ReturnNode(value))){
+            cout << "Node with value: " << value << " does not exist." << endl;
             return nullptr;
         }
-
+        cout << "Looking for successor of : " << value << endl;
+        //if right side exists, loop to leftmost, then return
         if (pTree->right != nullptr) {
-            return minValue(pTree->right);
+            pTree = pTree->right;
+            while (pTree->left != nullptr) {
+                pTree = pTree->left;
+            }
+            return pTree;
         }
-
-        CBSTree *p = pTree->parent;
+        // There was nothing on the right 
+        // so go up to parent to look for next
+        CBSTree* p = pTree->parent;
         while (p != nullptr && pTree == p->right)
         {
             pTree = p;

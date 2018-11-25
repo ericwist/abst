@@ -47,7 +47,7 @@ int main()
             cout << "The successor of " << tvalint << " is " << successor->getValue() << endl;
         }
         else {
-            cout << tvalint << " has no successor." << endl;
+            cout << "Could not find successor." << endl;
         }
         cout << "Print by tree level." << endl;
         myTree.printLevelOrder();
