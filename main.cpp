@@ -5,16 +5,50 @@
 #include <cstdlib>
 #include <time.h>
 #include "BSTree.h"
-
+#include "array.h"
 using namespace std;
 
 int main()
 {
     clock_t start, finish;
     double duration;
+#if 1
+    // int array
+    int TreeKeys[18] = {50,76,21,4,32,21,15,50,0,14,100,83,0,2,3,70,87,80};
+    // load array
+    CArray<int> a(18);
+    for (int i = 0; i < 18; ++i) {
+        a.setArray(i, TreeKeys[i]);
+    }
+    a.dumpArray();
+    std::cout << "Move zeros to end array\n";
+    int numberOfZeros = a.moveZerosToEnd();
+    std::cout << numberOfZeros << " zeros found in array\n"; 
+    a.dumpArray();
+    std::cout << "Sort array\n";
+    a.Sort();
+    a.dumpArray();
+    std::cout << "Reverse array\n";
+    a.reverseArray();
+    a.dumpArray();
+    // string array
+    string TreeKeysStr[16] = {"one","two","three","johnny","joey","jerry","joanne","bob","boris","butthead","beavis","ann","robbie","derek","donald","nathan"};
+    // load array
+    CArray<string> astr(16);
+    for (int i = 0; i < 16; ++i) {
+        astr.setArray(i, TreeKeysStr[i]);
+    }
+    astr.dumpArray();
+    std::cout << "Sort array\n";
+    astr.bubbleSort();
+    astr.dumpArray();
+    std::cout << "Reverse array\n";
+    astr.reverseArray();
+    astr.dumpArray();
 
-    //Test loading and printing integers
-    int TreeKeys[16] = {50,76,21,4,32,64,15,52,14,100,83,2,3,70,87,80 };
+#else
+    //Test loading and printing integers to binary tree
+    int TreeKeys[16] = { 50,76,21,4,32,64,15,52,14,100,83,2,3,70,87,80 };
     CBSTree<int> myTree;
     int input=0;
     string sinput = "";
@@ -41,7 +75,7 @@ int main()
         cout << "Smallest value is " << ismall << endl;
         int isKthsmallest = myTree.kthSmallestInBST(4);
         cout << "4th smallest value is " << isKthsmallest << endl;
-        int tvalint = 64;
+        int tvalint = 87;
         CBSTree<int>* successor = myTree.inOrderSuccessor(tvalint);
         if (successor != nullptr) {
             cout << "The successor of " << tvalint << " is " << successor->getValue() << endl;
@@ -128,6 +162,7 @@ int main()
             }
         }
     }
+#endif
     return 0; 
 }
 

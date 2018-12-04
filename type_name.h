@@ -1,4 +1,5 @@
 //This header was cribbed from github - ejw
+#pragma once
 #include <type_traits>
 #include <typeinfo>
 #ifndef _MSC_VER

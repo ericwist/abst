@@ -22,11 +22,8 @@ private:
     CBSTree* root;
 
     void AddLeafRecursive(const T& value, CBSTree* pTree) {
-        if (root == nullptr) {
-            root = CreateLeaf(value);
-            parent = nullptr;
-        }
-        else if (value < pTree->value) {
+
+         if (value < pTree->value) {
             if (pTree->left != nullptr)
             {
                 AddLeafRecursive(value, pTree->left);
@@ -65,9 +62,14 @@ private:
             int lDepth = maxDepth(p->left);
             int rDepth = maxDepth(p->right);
 
-            if (lDepth > rDepth)
+            if (lDepth > rDepth) 
+            {
                 return(lDepth + 1);
-            else return(rDepth + 1);
+            }
+            else 
+            {
+                return(rDepth + 1);
+            }
         }
     }
 
@@ -89,9 +91,6 @@ private:
             cout << "The tree is empty\n";
     }
 #else
-        if (root == nullptr) {
-            cout << "The tree is empty\n";
-        }
         if (pTree != nullptr) {
             if (pTree->left) {
                 PrintInOrderRecursive(pTree->left);
@@ -169,7 +168,7 @@ private:
                 if (parent->left->value == value)
                 {
                     RemoveMatch(parent, parent->left, true);
-                    }
+                }
                 else
                 {
                     RemoveNodeRecursive(value, parent->left);
@@ -373,12 +372,17 @@ public:
     
     void AddLeaf(const T& value)
     {
+        if (root == nullptr) {
+            root = CreateLeaf(value);
+            return;
+        }
         AddLeafRecursive(value, root);
     }    
     
     void PrintInOrder() 
     {
 #ifdef _RECURSIVE_
+        if (root == nullptr) { cout << "Tree is empty." << endl; return; }
         PrintInOrderRecursive(root);
 #else // NON-RECURSIVE
         // check if root is null
@@ -582,11 +586,13 @@ public:
         // There was nothing on the right 
         // so go up to parent to look for next
         CBSTree* p = pTree->parent;
-        while (p != nullptr && pTree == p->right)
+         while (p != nullptr && pTree == p->right)
         {
             pTree = p;
             p = p->parent;
         }
         return p;
     }
+
+    //three ways of traversing BST 
 };
