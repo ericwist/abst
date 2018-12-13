@@ -151,9 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="array.h" />
     <ClInclude Include="BSTree.h" />
-    <ClInclude Include="linkedList.h" />
+    <ClInclude Include="macros.h" />
     <ClInclude Include="type_name.h" />
   </ItemGroup>
   <ItemGroup>

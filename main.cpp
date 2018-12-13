@@ -5,60 +5,25 @@
 #include <cstdlib>
 #include <time.h>
 #include "BSTree.h"
-#include "array.h"
-using namespace std;
 
 int main()
 {
     clock_t start, finish;
     double duration;
-#if 1
-    // int array
-    int TreeKeys[18] = {50,76,21,4,32,21,15,50,0,14,100,83,0,2,3,70,87,80};
-    // load array
-    CArray<int> a(18);
-    for (int i = 0; i < 18; ++i) {
-        a.setArray(i, TreeKeys[i]);
-    }
-    a.dumpArray();
-    std::cout << "Move zeros to end array\n";
-    int numberOfZeros = a.moveZerosToEnd();
-    std::cout << numberOfZeros << " zeros found in array\n"; 
-    a.dumpArray();
-    std::cout << "Sort array\n";
-    a.Sort();
-    a.dumpArray();
-    std::cout << "Reverse array\n";
-    a.reverseArray();
-    a.dumpArray();
-    // string array
-    string TreeKeysStr[16] = {"one","two","three","johnny","joey","jerry","joanne","bob","boris","butthead","beavis","ann","robbie","derek","donald","nathan"};
-    // load array
-    CArray<string> astr(16);
-    for (int i = 0; i < 16; ++i) {
-        astr.setArray(i, TreeKeysStr[i]);
-    }
-    astr.dumpArray();
-    std::cout << "Sort array\n";
-    astr.bubbleSort();
-    astr.dumpArray();
-    std::cout << "Reverse array\n";
-    astr.reverseArray();
-    astr.dumpArray();
-
-#else
+    
     //Test loading and printing integers to binary tree
-    int TreeKeys[16] = { 50,76,21,4,32,64,15,52,14,100,83,2,3,70,87,80 };
+    int TreeKeys[48] = { 50,76,21,4,32,64,15,52,14,100,83,2,3,70,87,80,\
+        150,176,121,104,132,164,115,152,114,200,183,102,103,170,187,180,\
+        250,276,221,204,232,264,215,252,214,300,283,202,203,270,287,280 };
     CBSTree<int> myTree;
     int input=0;
-    string sinput = "";
-    cout << "Printing the tree in order\nBefore adding numbers\n";
-    myTree.PrintInOrder();
-    for (int i = 0; i < 16; ++i) {
+//    string sinput = "";
+    int treesize = sizeof(TreeKeys) / sizeof(*TreeKeys);
+    for (int i = 0; i < treesize; ++i) {
         myTree.AddLeaf(TreeKeys[i]);
     }
-    cout << "Printing the tree in order\nAfter adding numbers\n";
-    myTree.PrintInOrder();
+    cout << "ATree has been filled\n";
+    
     bool bret_symmetric = myTree.isTreeSymmetric();
     if (bret_symmetric) {
         cout << "The tree is symmetric\n";
@@ -67,25 +32,58 @@ int main()
         cout << "The tree is NOT symmetric\n";
     }
     
-
-    
     while (input != -1)
     {
+        cout << "Printing the inOrderTraversals, with timing\n";
+
+        start = clock();
+        myTree.inOrderTraversalRecurse();
+        finish = clock();
+        duration = (double)(finish - start) / CLOCKS_PER_SEC;
+        printf("In order recursive took %2.9f seconds\n", duration);
+
+        start = clock();
+        myTree.inOrderTraversalUseStack();
+        finish = clock();
+        duration = (double)(finish - start) / CLOCKS_PER_SEC;
+        printf("In order using stack took %2.9f seconds\n", duration);
+
+        start = clock();
+        myTree.inOrderTraversalNoRecurseNoCollections();
+        finish = clock();
+        duration = (double)(finish - start) / CLOCKS_PER_SEC;
+        printf("In order using while loop took %2.9f seconds\n", duration);
+        
         int ismall = myTree.FindSmallest();
         cout << "Smallest value is " << ismall << endl;
+        
         int isKthsmallest = myTree.kthSmallestInBST(4);
         cout << "4th smallest value is " << isKthsmallest << endl;
+        
         int tvalint = 87;
         CBSTree<int>* successor = myTree.inOrderSuccessor(tvalint);
-        if (successor != nullptr) {
+        if (successor) {
             cout << "The successor of " << tvalint << " is " << successor->getValue() << endl;
         }
         else {
             cout << "Could not find successor." << endl;
         }
+        
         cout << "Print by tree level." << endl;
-        myTree.printLevelOrder();
-        cout << endl;        
+        start = clock();
+        myTree.printLevelOrderRecurse();
+        finish = clock();
+        duration = (double)(finish - start) / CLOCKS_PER_SEC;
+        printf("Print by tree level recursive took %2.9f seconds\n", duration);
+        cout << endl;
+#if 0
+        start = clock();
+        myTree.PrintByLevelUsingQueue();
+        finish = clock();
+        duration = (double)(finish - start) / CLOCKS_PER_SEC;
+        printf("Print by tree level using queue took %2.9f seconds\n", duration);
+        cout << endl;
+#endif
         cout << "Enter a value to delete. Enter -1 to stop the process\n";
         cout << "Delete Node: ";
         cin >> input;
@@ -97,15 +95,12 @@ int main()
                 myTree.RemoveNode(input);
                 finish = clock();
                 duration = (double)(finish - start) / CLOCKS_PER_SEC;
-                //cout << "Remove operation took " << duration << " seconds\n";
                 printf("Remove operation took %2.9f seconds\n", duration);
-
-                myTree.PrintInOrder();
                 cout << endl;
             }
         }
     }
-
+#if 0
     cout << "Now use same code for BST of strings."<< endl;
     cout << endl;
 
@@ -127,8 +122,8 @@ int main()
     myTreeStr.printLevelOrder();
     while (sinput != "stop")
     {
-        string small = myTreeStr.FindSmallest();
-        cout << "Smallest value is " << small << endl;
+        //string small = myTreeStr.FindSmallest();
+        //cout << "Smallest value is " << small << endl;
         string isKthsmallestStr = myTreeStr.kthSmallestInBST(4);
         cout << "4th smallest value is " << isKthsmallestStr << endl;
         string sval = "beavis";
@@ -165,5 +160,3 @@ int main()
 #endif
     return 0; 
 }
-
-
