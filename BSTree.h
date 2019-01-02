@@ -350,7 +350,7 @@ public:
     }
     T getValue() { return value; }
     ~CBSTree() {
-        //SAFE_DELETE(root);
+        //SAFE_DELETE();
     }
     CBSTree* CreateLeaf(const T& value)
     {
@@ -604,7 +604,6 @@ void inOrderTraversalRecurse()
 
 void inOrderTraversalUseStack()
 {
-    if (root == nullptr) { cout << "Tree is empty." << endl; return; }
     if (root == nullptr) { cout << "Tree is empty." << endl; return; }
     // move to the bottom of the list
     std::stack<CBSTree*> st;
