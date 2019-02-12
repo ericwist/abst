@@ -47,7 +47,7 @@ int main()
         finish = clock();
         duration = (double)(finish - start) / CLOCKS_PER_SEC;
         printf("In order using stack took %2.9f seconds\n", duration);
-
+        cout << "IN ORDER TRAVERSAL:" << "\n";
         start = clock();
         myTree.inOrderTraversalNoRecurseNoCollections();
         finish = clock();

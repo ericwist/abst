@@ -558,38 +558,34 @@ public:
     //1. In-Order
 void inOrderTraversalNoRecurseNoCollections()
 {
-        if (root == nullptr) { cout << "Tree is empty." << endl; return; }
-        CBSTree* pTree = root;
-        if (pTree)
+    if (root == nullptr) { cout << "Tree is empty." << endl; return; }
+    CBSTree *cur, *pre;
+    cur = root;
+    while (cur)
+    {
+        if (cur->left == nullptr) {
+            cout << cur->value << " ";
+            cur = cur->right;
+        }
+        else
         {
-            CBSTree * cur, *pre;
+            // Find the inorder predeccessor of cur
+            pre = cur->left;
+            while ((pre->right) && (pre->right != cur))
+                pre = pre->right;
 
-            cur = pTree;
-            while (cur){
-                if (cur->left == nullptr) {
-                    cout << cur->value << " ";
-                    cur = cur->right;
-                }
-                else
-                {
-                    // Find the inorder predeccessor of cur
-                    pre = cur->left;
-                    while ((pre->right) && (pre->right != cur))
-                        pre = pre->right;
-
-                    // Set cur as right child of its inorder predecessor
-                    if (pre->right == nullptr) 
-                    {
-                        pre->right = cur; // Set, but restore below
-                        cur = cur->left;
-                    }
-                else
-                {
-                    // restore to original tree
-                    pre->right = nullptr;
-                    cout << cur->value << " ";
-                    cur = cur->right;
-                }
+            // Set cur as right child of its inorder predecessor
+            if (pre->right == nullptr) 
+            {
+                pre->right = cur; // Set, but restore below
+                cur = cur->left;
+            }
+            else
+            {
+                // restore to original tree
+                pre->right = nullptr;
+                cout << cur->value << " ";
+                cur = cur->right;
             }
         }
     }
