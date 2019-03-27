@@ -12,18 +12,26 @@ int main()
     double duration;
     
     //Test loading and printing integers to binary tree
+#if 0
     int TreeKeys[48] = { 50,76,21,4,32,64,15,52,14,100,83,2,3,70,87,80,\
         150,176,121,104,132,164,115,152,114,200,183,102,103,170,187,180,\
         250,276,221,204,232,264,215,252,214,300,283,202,203,270,287,280 };
+#else
+    int TreeKeys[16] = { 10,11,12,13,14,15,16,1,2,3,4,5,6,7,8,9 };
+
+#endif
     CBSTree<int> myTree;
     int input=0;
 //    string sinput = "";
     int treesize = sizeof(TreeKeys) / sizeof(*TreeKeys);
     for (int i = 0; i < treesize; ++i) {
-        myTree.AddLeaf(TreeKeys[i]);
+        myTree.addLeaf(TreeKeys[i]);
     }
-    cout << "ATree has been filled\n";
-    
+    cout << "Tree has been filled\n";
+    myTree.NormalizeTheTree();
+    cout << "Tree has been normalized\n";
+    int depth = myTree.getTreeDepth();
+    cout << "Tree depth is " << depth << "\n";
     bool bret_symmetric = myTree.isTreeSymmetric();
     if (bret_symmetric) {
         cout << "The tree is symmetric\n";
@@ -54,7 +62,7 @@ int main()
         duration = (double)(finish - start) / CLOCKS_PER_SEC;
         printf("In order using while loop took %2.9f seconds\n", duration);
         
-        int ismall = myTree.FindSmallest();
+        int ismall = myTree.findSmallest();
         cout << "Smallest value is " << ismall << endl;
         
         int isKthsmallest = myTree.kthSmallestInBST(4);
@@ -69,16 +77,16 @@ int main()
             cout << "Could not find successor." << endl;
         }
         
-        cout << "Print by tree level." << endl;
+        cout << "Print level zigzag down." << endl;
         start = clock();
-        myTree.printLevelOrderRecurse();
+        myTree.printLevelsZigzagDown();
         finish = clock();
         duration = (double)(finish - start) / CLOCKS_PER_SEC;
-        printf("Print by tree level recursive took %2.9f seconds\n", duration);
+        printf("Print by tree Zigzag took %2.9f seconds\n", duration);
         cout << endl;
 #if 0
         start = clock();
-        myTree.PrintByLevelUsingQueue();
+        myTree.printByLevelUsingQueue();
         finish = clock();
         duration = (double)(finish - start) / CLOCKS_PER_SEC;
         printf("Print by tree level using queue took %2.9f seconds\n", duration);
@@ -92,7 +100,7 @@ int main()
             {
                 cout << endl;
                 start = clock();
-                myTree.RemoveNode(input);
+                myTree.removeNode(input);
                 finish = clock();
                 duration = (double)(finish - start) / CLOCKS_PER_SEC;
                 printf("Remove operation took %2.9f seconds\n", duration);
@@ -110,19 +118,19 @@ int main()
     cout << "Printing the tree in order\nBefore adding strings\n";
     myTreeStr.PrintInOrder();
     for (int i = 0; i < 16; ++i) {
-        myTreeStr.AddLeaf(TreeKeysStr[i]);
+        myTreeStr.addLeaf(TreeKeysStr[i]);
     }
     cout << "Printing the tree in order\nAfter adding strings\n";
     myTreeStr.PrintInOrder();
     cout << endl;
     cout << "Print one and children\n";
     string s = "one";
-    myTreeStr.PrintChildren(s);
+    myTreeStr.printChildren(s);
     cout << "Print by tree level." << endl;
     myTreeStr.printLevelOrder();
     while (sinput != "stop")
     {
-        //string small = myTreeStr.FindSmallest();
+        //string small = myTreeStr.findSmallest();
         //cout << "Smallest value is " << small << endl;
         string isKthsmallestStr = myTreeStr.kthSmallestInBST(4);
         cout << "4th smallest value is " << isKthsmallestStr << endl;
@@ -135,7 +143,7 @@ int main()
         cout << endl;
         cout << "Print one and children\n";
         string s = "one";
-        myTreeStr.PrintChildren(s);
+        myTreeStr.printChildren(s);
         cout << "Print by tree level." << endl;
         myTreeStr.printLevelOrder();
         cout << "Enter a value to delete. Enter 'stop' to stop the process\n";
@@ -146,7 +154,7 @@ int main()
             {
                 cout << endl;
                 start = clock();
-                myTreeStr.RemoveNode(sinput);
+                myTreeStr.removeNode(sinput);
                 finish = clock();
                 duration = (double)(finish - start) / CLOCKS_PER_SEC;
                 //cout << "Remove operation took " << duration << " seconds\n";

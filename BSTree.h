@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <stack>
 #include <queue>
+#include <vector>
 #include "type_name.h"
 #include "macros.h"
 //#define _RECURSIVE_
@@ -30,10 +31,10 @@ private:
                 AddLeafRecursive(value, pTree->left);
             }
             else {
-                pTree->left = CreateLeaf(value);
+                pTree->left = createLeaf(value);
                 pTree->left->parent = pTree;
-                cout << "Adding left value: " << value << " whose parent value is: " << pTree->value << "\n";
-                cout << endl;
+                //cout << "Adding left value: " << value << " whose parent value is: " << pTree->value << "\n";
+                //cout << endl;
             }
         }
         else if (value > pTree->value) {
@@ -42,10 +43,10 @@ private:
                 AddLeafRecursive(value, pTree->right);
             }
             else {
-                pTree->right = CreateLeaf(value);
+                pTree->right = createLeaf(value);
                 pTree->right->parent = pTree;
-                cout << "Adding right value: " << value << " whose parent value is: " << pTree->value << "\n";
-                cout << endl;
+                //cout << "Adding right value: " << value << " whose parent value is: " << pTree->value << "\n";
+                //cout << endl;
             }
         }
         else
@@ -339,6 +340,30 @@ private:
         }
     }
 
+    void storeBSTNodes(CBSTree* node, vector<CBSTree*> &nodes)
+    {
+        if (!node)
+            return;
+        storeBSTNodes(node->left, nodes);
+        nodes.push_back(node);
+        storeBSTNodes(node->right, nodes);
+
+    }
+
+    CBSTree* buildTreeUtil(vector<CBSTree*> &nodes, int start, int end)
+    {
+        if (start > end)
+            return nullptr;
+
+        int mid = (start + end) / 2;
+        
+        CBSTree* local_root = nodes[mid];
+
+        local_root->left = buildTreeUtil(nodes, start, mid-1);
+        local_root->right = buildTreeUtil(nodes, mid + 1, end);
+
+        return local_root;
+    }
 public:
     CBSTree() {}
     CBSTree(const T &v, CBSTree* r) : value(v), left(nullptr), right(nullptr), parent(nullptr), root(r)
@@ -352,7 +377,7 @@ public:
     ~CBSTree() {
         //SAFE_DELETE();
     }
-    CBSTree* CreateLeaf(const T& value)
+    CBSTree* createLeaf(const T& value)
     {
         CBSTree* node = new CBSTree(value, root);
         node->left = nullptr;
@@ -362,16 +387,16 @@ public:
         return node;
     }  
     
-    void AddLeaf(const T& value)
+    void addLeaf(const T& value)
     {
         if (root == nullptr) {
-            root = CreateLeaf(value);
+            root = createLeaf(value);
             return;
         }
         AddLeafRecursive(value, root);
     }    
     
-    T ReturnRootValue()
+    T returnRootValue()
     {
         if (root)
         {
@@ -383,7 +408,7 @@ public:
         }
     }
 
-    void PrintChildren(const T& value)
+    void printChildren(const T& value)
     {
         CBSTree* pTree = ReturnNode(value);
 
@@ -413,7 +438,7 @@ public:
         }
     }
 
-    T FindSmallest()
+    T findSmallest()
     {
 #ifdef _RECURSIVE_
         return FindSmallestRecursive(root);
@@ -427,7 +452,7 @@ public:
 
     }
 
-    void RemoveNode(const T& value) {
+    void removeNode(const T& value) {
         if (root) {
             RemoveNodeRecursive(value, root);
         }
@@ -497,7 +522,7 @@ public:
         }
     }
 
-    void PrintByLevelUsingQueue() {
+    void printByLevelUsingQueue() {
         if (root == nullptr) { cout << "Tree is empty." << endl; return; }
         std::queue<CBSTree*> queue;
         queue.push(root);
@@ -627,4 +652,99 @@ void inOrderTraversalUseStack()
 }
     //2. Pre-Order
     //3. Post-Order
+#if 1
+void printLevelsZigzagDown()
+{
+    // direction boolean
+    bool right = true;
+
+    // declare two stacks
+    stack<CBSTree*>curr;
+    stack<CBSTree*>next;
+
+    curr.push(root);
+
+    while (!curr.empty())
+    {
+        // Pop out of stack
+        CBSTree* temp = curr.top();
+        curr.pop();
+
+        if (temp)
+        {
+            cout << temp->getValue() << " ";
+
+            //
+            if (right)
+            {
+                if (temp->left)
+                    next.push(temp->left);
+                if (temp->right)
+                    next.push(temp->right);
+            }
+            else
+            {
+                if (temp->right)
+                    next.push(temp->right);
+                if (temp->left)
+                    next.push(temp->left);
+            }
+        }
+        if (curr.empty())
+        {
+            right = !right;
+            swap(curr, next);
+            cout << endl;
+        }
+    }
+}
+#else
+void printLevelsLeftToRight()
+{
+    // declare two stacks
+    stack<CBSTree*>curr;
+    stack<CBSTree*>next;
+
+    curr.push(root);
+
+    while (!curr.empty())
+    {
+        // Pop out of stack
+        CBSTree* temp = curr.top();
+        curr.pop();
+
+        if (temp)
+        {
+            cout << temp->getValue() << " ";
+            if (temp->right)
+                next.push(temp->right);
+            if (temp->left)
+                next.push(temp->left);
+        }
+        if (curr.empty())
+        {
+            swap(curr, next);
+            cout << endl;
+        }
+    }
+}
+#endif
+int getTreeDepth()
+{
+    return maxDepth(root);
+}
+
+CBSTree* buildTree()
+{
+    vector<CBSTree*> nodes;
+    storeBSTNodes(root, nodes);
+    int n = nodes.size();
+    return buildTreeUtil(nodes, 0, n - 1);
+}
+
+void NormalizeTheTree()
+{
+    root = buildTree();
+}
+
 };
