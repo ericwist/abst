@@ -77,12 +77,14 @@ int main()
             cout << "Could not find successor." << endl;
         }
         
-        cout << "Print level zigzag down." << endl;
+        cout << "Print level zigzag down." << "\n";
         start = clock();
         myTree.printLevelsZigzagDown();
+        cout << "Print levels Left-to-Right." << "\n";
+        myTree.printLevelsLeftToRight();
         finish = clock();
         duration = (double)(finish - start) / CLOCKS_PER_SEC;
-        printf("Print by tree Zigzag took %2.9f seconds\n", duration);
+        printf("Print by tree levels took %2.9f seconds\n", duration);
         cout << endl;
 #if 0
         start = clock();

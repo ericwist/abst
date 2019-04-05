@@ -9,6 +9,7 @@
 #include <stack>
 #include <queue>
 #include <vector>
+#include <list>
 #include "type_name.h"
 #include "macros.h"
 //#define _RECURSIVE_
@@ -652,7 +653,7 @@ void inOrderTraversalUseStack()
 }
     //2. Pre-Order
     //3. Post-Order
-#if 1
+
 void printLevelsZigzagDown()
 {
     // direction boolean
@@ -698,28 +699,26 @@ void printLevelsZigzagDown()
         }
     }
 }
-#else
+
 void printLevelsLeftToRight()
 {
-    // declare two stacks
-    stack<CBSTree*>curr;
-    stack<CBSTree*>next;
+    // declare two queues
+    queue<CBSTree*>curr;
+    queue<CBSTree*>next;
 
     curr.push(root);
 
     while (!curr.empty())
     {
-        // Pop out of stack
-        CBSTree* temp = curr.top();
+        // Pop out of queue
+        CBSTree* temp = curr.front();
         curr.pop();
-
-        if (temp)
-        {
+        if (temp) {
             cout << temp->getValue() << " ";
-            if (temp->right)
-                next.push(temp->right);
             if (temp->left)
                 next.push(temp->left);
+            if (temp->right)
+                next.push(temp->right);
         }
         if (curr.empty())
         {
@@ -728,7 +727,7 @@ void printLevelsLeftToRight()
         }
     }
 }
-#endif
+
 int getTreeDepth()
 {
     return maxDepth(root);
