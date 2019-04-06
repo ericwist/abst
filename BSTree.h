@@ -24,9 +24,10 @@ private:
     CBSTree* parent;
     CBSTree* root;
     int size;
-    void AddLeafRecursive(const T& value, CBSTree* pTree) {
+    void AddLeafRecursive(const T& value, CBSTree* pTree)
+    {
 
-         if (value < pTree->value) {
+        if (value < pTree->value) {
             if (pTree->left)
             {
                 AddLeafRecursive(value, pTree->left);
@@ -52,7 +53,7 @@ private:
         }
         else
         {
-        cout << "The value " << value << " has already been added to the tree\n";
+            cout << "The value " << value << " has already been added to the tree\n";
         }
     }
 
@@ -65,11 +66,11 @@ private:
             int lDepth = maxDepth(p->left);
             int rDepth = maxDepth(p->right);
 
-            if (lDepth > rDepth) 
+            if (lDepth > rDepth)
             {
                 return(lDepth + 1);
             }
-            else 
+            else
             {
                 return(rDepth + 1);
             }
@@ -198,8 +199,8 @@ private:
             delPtr->right = nullptr;
             delete delPtr;
             cout << "The root node with value" << rootValue << " was deleted. "
-                    << "The new root contains value " << root->value << endl;
-                    
+                << "The new root contains value " << root->value << endl;
+
         }
         else if (root->left && root->right == nullptr)
         {
@@ -207,7 +208,7 @@ private:
             delPtr->left = nullptr;
             delete delPtr;
             cout << "The root node with value" << rootValue << " was deleted. "
-                    << "The new root contains value " << root->value << endl;
+                << "The new root contains value " << root->value << endl;
         }
 
         //root node has two children
@@ -216,7 +217,7 @@ private:
             smallestInRightSubtree = FindSmallestRecursive(root->right);
             RemoveNodeRecursive(smallestInRightSubtree, root);
             root->value = smallestInRightSubtree;
-            cout << "The root value containing value " << rootValue <<" was overwritten with value " << root->value << endl;
+            cout << "The root value containing value " << rootValue << " was overwritten with value " << root->value << endl;
         }
     }
 
@@ -357,10 +358,10 @@ private:
             return nullptr;
 
         int mid = (start + end) / 2;
-        
+
         CBSTree* local_root = nodes[mid];
 
-        local_root->left = buildTreeUtil(nodes, start, mid-1);
+        local_root->left = buildTreeUtil(nodes, start, mid - 1);
         local_root->right = buildTreeUtil(nodes, mid + 1, end);
 
         return local_root;
@@ -386,8 +387,8 @@ public:
         node->parent = nullptr;
         ++size;
         return node;
-    }  
-    
+    }
+
     void addLeaf(const T& value)
     {
         if (root == nullptr) {
@@ -395,8 +396,8 @@ public:
             return;
         }
         AddLeafRecursive(value, root);
-    }    
-    
+    }
+
     T returnRootValue()
     {
         if (root)
@@ -493,7 +494,7 @@ public:
         }
         return pTree->value;
     }
-    
+
     bool isTreeSymmetric() {
         if (root == nullptr)
             return true;
@@ -550,11 +551,12 @@ public:
             cout << endl;
         }
     }
-    
+
     CBSTree * inOrderSuccessor(const T& value)
     {
         CBSTree* pTree = nullptr;
-        if (nullptr == (pTree = ReturnNode(value))){
+        if (nullptr == (pTree = ReturnNode(value)))
+        {
             cout << "Node with value: " << value << " does not exist." << endl;
             return nullptr;
         }
@@ -582,168 +584,169 @@ public:
 
     //define and code the three ways of traversing BST.
     //1. In-Order
-void inOrderTraversalNoRecurseNoCollections()
-{
-    if (root == nullptr) { cout << "Tree is empty." << endl; return; }
-    CBSTree *cur, *pre;
-    cur = root;
-    while (cur)
+    void inOrderTraversalNoRecurseNoCollections()
     {
-        if (cur->left == nullptr) {
-            cout << cur->value << " ";
-            cur = cur->right;
-        }
-        else
+        if (root == nullptr) { cout << "Tree is empty." << endl; return; }
+        CBSTree *cur, *pre;
+        cur = root;
+        while (cur)
         {
-            // Find the inorder predeccessor of cur
-            pre = cur->left;
-            while ((pre->right) && (pre->right != cur))
-                pre = pre->right;
-
-            // Set cur as right child of its inorder predecessor
-            if (pre->right == nullptr) 
-            {
-                pre->right = cur; // Set, but restore below
-                cur = cur->left;
-            }
-            else
-            {
-                // restore to original tree
-                pre->right = nullptr;
+            if (cur->left == nullptr) {
                 cout << cur->value << " ";
                 cur = cur->right;
             }
-        }
-    }
-    cout << endl;
-}
-void inOrderTraversalRecurse()
-{
-    if (root == nullptr) { cout << "Tree is empty." << endl; return; }
-    PrintInOrderRecursive(root);
-    cout << endl;
-}
+            else
+            {
+                // Find the inorder predeccessor of cur
+                pre = cur->left;
+                while ((pre->right) && (pre->right != cur))
+                    pre = pre->right;
 
-void inOrderTraversalUseStack()
-{
-    if (root == nullptr) { cout << "Tree is empty." << endl; return; }
-    // move to the bottom of the list
-    std::stack<CBSTree*> st;
-    CBSTree* pTree = root;
-    // load stack while traversing left
-    while (pTree) {
-        st.push(pTree);
-        pTree = pTree->left;
-    }
-
-    // move up the tree and print as we go...
-    while (!st.empty() && nullptr != (pTree = st.top())) {
-        st.pop();
-        cout << pTree->value << " ";
-        //right side of tree 
-        if (pTree->right) {
-            pTree = pTree->right;
-            while (pTree) {
-                st.push(pTree);
-                pTree = pTree->left;
+                // Set cur as right child of its inorder predecessor
+                if (pre->right == nullptr)
+                {
+                    pre->right = cur; // Set, but restore below
+                    cur = cur->left;
+                }
+                else
+                {
+                    // restore to original tree
+                    pre->right = nullptr;
+                    cout << cur->value << " ";
+                    cur = cur->right;
+                }
             }
         }
+        cout << endl;
     }
-    cout << endl;
-}
+    void inOrderTraversalRecurse()
+    {
+        if (root == nullptr) { cout << "Tree is empty." << endl; return; }
+        PrintInOrderRecursive(root);
+        cout << endl;
+    }
+
+    void inOrderTraversalUseStack()
+    {
+        if (root == nullptr) { cout << "Tree is empty." << endl; return; }
+        // move to the bottom of the list
+        std::stack<CBSTree*> st;
+        CBSTree* pTree = root;
+        // load stack while traversing left
+        while (pTree) {
+            st.push(pTree);
+            pTree = pTree->left;
+        }
+
+        // move up the tree and print as we go...
+        while (!st.empty() && nullptr != (pTree = st.top()))
+        {
+            st.pop();
+            cout << pTree->value << " ";
+            //right side of tree 
+            if (pTree->right) {
+                pTree = pTree->right;
+                while (pTree) {
+                    st.push(pTree);
+                    pTree = pTree->left;
+                }
+            }
+        }
+        cout << endl;
+    }
     //2. Pre-Order
     //3. Post-Order
 
-void printLevelsZigzagDown()
-{
-    // direction boolean
-    bool right = true;
-
-    // declare two stacks
-    stack<CBSTree*>curr;
-    stack<CBSTree*>next;
-
-    curr.push(root);
-
-    while (!curr.empty())
+    void printLevelsZigzagDown()
     {
-        // Pop out of stack
-        CBSTree* temp = curr.top();
-        curr.pop();
+        // direction boolean
+        bool right = true;
 
-        if (temp)
+        // declare two stacks
+        stack<CBSTree*>curr;
+        stack<CBSTree*>next;
+
+        curr.push(root);
+
+        while (!curr.empty())
         {
-            cout << temp->getValue() << " ";
+            // Pop out of stack
+            CBSTree* temp = curr.top();
+            curr.pop();
 
-            //
-            if (right)
+            if (temp)
             {
+                cout << temp->getValue() << " ";
+
+                //
+                if (right)
+                {
+                    if (temp->left)
+                        next.push(temp->left);
+                    if (temp->right)
+                        next.push(temp->right);
+                }
+                else
+                {
+                    if (temp->right)
+                        next.push(temp->right);
+                    if (temp->left)
+                        next.push(temp->left);
+                }
+            }
+            if (curr.empty())
+            {
+                right = !right;
+                swap(curr, next);
+                cout << endl;
+            }
+        }
+    }
+
+    void printLevelsLeftToRight()
+    {
+        // declare two queues
+        queue<CBSTree*>curr;
+        queue<CBSTree*>next;
+
+        curr.push(root);
+
+        while (!curr.empty())
+        {
+            // Pop out of queue
+            CBSTree* temp = curr.front();
+            curr.pop();
+            if (temp) {
+                cout << temp->getValue() << " ";
                 if (temp->left)
                     next.push(temp->left);
                 if (temp->right)
                     next.push(temp->right);
             }
-            else
+            if (curr.empty())
             {
-                if (temp->right)
-                    next.push(temp->right);
-                if (temp->left)
-                    next.push(temp->left);
+                swap(curr, next);
+                cout << endl;
             }
         }
-        if (curr.empty())
-        {
-            right = !right;
-            swap(curr, next);
-            cout << endl;
-        }
     }
-}
 
-void printLevelsLeftToRight()
-{
-    // declare two queues
-    queue<CBSTree*>curr;
-    queue<CBSTree*>next;
-
-    curr.push(root);
-
-    while (!curr.empty())
+    int getTreeDepth()
     {
-        // Pop out of queue
-        CBSTree* temp = curr.front();
-        curr.pop();
-        if (temp) {
-            cout << temp->getValue() << " ";
-            if (temp->left)
-                next.push(temp->left);
-            if (temp->right)
-                next.push(temp->right);
-        }
-        if (curr.empty())
-        {
-            swap(curr, next);
-            cout << endl;
-        }
+        return maxDepth(root);
     }
-}
 
-int getTreeDepth()
-{
-    return maxDepth(root);
-}
+    CBSTree* buildTree()
+    {
+        vector<CBSTree*> nodes;
+        storeBSTNodes(root, nodes);
+        int n = nodes.size();
+        return buildTreeUtil(nodes, 0, n - 1);
+    }
 
-CBSTree* buildTree()
-{
-    vector<CBSTree*> nodes;
-    storeBSTNodes(root, nodes);
-    int n = nodes.size();
-    return buildTreeUtil(nodes, 0, n - 1);
-}
-
-void NormalizeTheTree()
-{
-    root = buildTree();
-}
+    void NormalizeTheTree()
+    {
+        root = buildTree();
+    }
 
 };
