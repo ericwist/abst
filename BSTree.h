@@ -90,6 +90,36 @@ private:
         }
     }
 
+    void PrintPreOrderRecursive(CBSTree* pTree)
+    {
+        if (pTree) {
+            cout << pTree->value << " ";
+
+            if (pTree->left) {
+                PrintPreOrderRecursive(pTree->left);
+            }
+
+            if (pTree->right) {
+                PrintPreOrderRecursive(pTree->right);
+            }
+        }
+    }
+
+    void PrintPostOrderRecursive(CBSTree* pTree)
+    {
+        if (pTree) {
+            if (pTree->left) {
+                PrintPostOrderRecursive(pTree->left);
+            }
+
+            if (pTree->right) {
+                PrintPostOrderRecursive(pTree->right);
+            }
+
+            cout << pTree->value << " ";
+        }
+    }
+
     CBSTree* ReturnNode(const T& value)
     {
         return ReturnNodeRecursive(value, root);
@@ -655,7 +685,20 @@ public:
         cout << endl;
     }
     //2. Pre-Order
+
+    void preOrderTraversalRecurse()
+    {
+        if (root == nullptr) { cout << "Tree is empty." << endl; return; }
+        PrintPreOrderRecursive(root);
+        cout << endl;
+    }
     //3. Post-Order
+    void postOrderTraversalRecurse()
+    {
+        if (root == nullptr) { cout << "Tree is empty." << endl; return; }
+        PrintPostOrderRecursive(root);
+        cout << endl;
+    }
 
     void printLevelsZigzagDown()
     {

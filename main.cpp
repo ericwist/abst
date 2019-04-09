@@ -62,6 +62,22 @@ int main()
         duration = (double)(finish - start) / CLOCKS_PER_SEC;
         printf("In order using while loop took %2.9f seconds\n", duration);
         
+        cout << "Printing the preOrderTraversals, with timing\n";
+        cout << "PRE-ORDER TRAVERSAL:" << "\n";
+        start = clock();
+        myTree.preOrderTraversalRecurse();
+        finish = clock();
+        duration = (double)(finish - start) / CLOCKS_PER_SEC;
+        printf("Pre-Order recursive took %2.9f seconds\n", duration);
+
+        cout << "Printing the postOrderTraversals, with timing\n";
+        cout << "POST-ORDER TRAVERSAL:" << "\n";
+        start = clock();
+        myTree.postOrderTraversalRecurse();
+        finish = clock();
+        duration = (double)(finish - start) / CLOCKS_PER_SEC;
+        printf("Post-Order recursive took %2.9f seconds\n", duration);
+
         int ismall = myTree.findSmallest();
         cout << "Smallest value is " << ismall << endl;
         
